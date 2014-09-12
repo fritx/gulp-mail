@@ -20,16 +20,25 @@ Highly learnt from [gulp-mailer](https://github.com/meerkats/gulp-mailer) (not a
 
 ```js
 var mail = require('gulp-mail')
+var smtpInfo = {
+  auth: {
+    user: 'foo@163.com',
+    pass: '123456'
+  },
+  host: 'smtp.163.com',
+  secureConnection: true,
+  port: 465
+}
 
 gulp.task('mail', function() {
-  return gulp.src('./mail.html')
+  return gulp.src('./mails/i-love-you.html')
     .pipe(mail({
+      subject: 'Surprise!?',
       to: [
-        'example@163.com'
+        'bar@gmail.com'
       ],
-      from: 'example@163.com',
-      subject: 'example',
-      html: '<h1>Hello!</h1>'
+      from: 'Foo <foo@163.com>',
+      smtp: smtpInfo
     }))
 })
 ```
