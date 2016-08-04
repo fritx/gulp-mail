@@ -20,7 +20,6 @@ module.exports = function (options) {
     //    options.transporter || { service: 'sendmail' }
     //);
     var transporter = nodemailer.createTransport('SMTP', options.smtp)
-
     return through2.obj(function (file, enc, next) {
         if (file.isNull()) {
             this.push(file);
@@ -28,19 +27,20 @@ module.exports = function (options) {
         }
         var to = options.to.join(',');
         var subject = options.subject || _subjectFromFilename(file.path);
+        var html = options.html || file.contents.toString();
         return transporter.sendMail({
             from: options.from,
             to: to,
             subject: subject,
             generateTextFromHTML: true, // added
-            html: file.contents.toString()
+            html: html
         }, function (error, info) {
             if (error) {
                 console.error(error);
                 return next();
             }
             gutil.log('Send email', gutil.colors.cyan(subject), 'to',
-                      gutil.colors.red(to));
+                gutil.colors.red(to));
             next();
         });
     });
