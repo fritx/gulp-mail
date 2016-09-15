@@ -37,10 +37,12 @@ module.exports = function (options) {
         }, function (error, info) {
             if (error) {
                 console.error(error);
+                transporter.close();
                 return next();
             }
             gutil.log('Send email', gutil.colors.cyan(subject), 'to',
-                gutil.colors.red(to));
+            gutil.colors.red(to));
+            transporter.close();
             next();
         });
     });
