@@ -8,7 +8,7 @@ var through2 = require('through2');
 var util = require('util');
 var gutil = require('gulp-util');
 
-var module.exports = function (options) {
+module.exports = function (options) {
 
     options = _.defaults(options || {}, {
         to: null,
@@ -18,9 +18,9 @@ var module.exports = function (options) {
         smtp: null
     });
 
-    var transporter = nodemailer.createTransport("SMTP", options.smtp);
-
     return through2.obj(function (file, enc, next) {
+
+        var transporter = nodemailer.createTransport("SMTP", options.smtp);
 
         if (file.isNull()) {
             this.push(file);
