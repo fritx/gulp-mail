@@ -8,7 +8,8 @@ var through2 = require('through2');
 var util = require('util');
 var gutil = require('gulp-util');
 
-module.exports = function (options) {
+var module.exports = function (options) {
+
     options = _.defaults(options || {}, {
         to: null,
         from: null,
@@ -16,18 +17,20 @@ module.exports = function (options) {
         html: null,
         smtp: null
     });
-    //var transporter = nodemailer.createTransport(
-    //    options.transporter || { service: 'sendmail' }
-    //);
-    var transporter = nodemailer.createTransport('SMTP', options.smtp)
+
+    var transporter = nodemailer.createTransport("SMTP", options.smtp);
+
     return through2.obj(function (file, enc, next) {
+
         if (file.isNull()) {
             this.push(file);
             return next();
         }
+
         var to = options.to.join(',');
         var subject = options.subject || _subjectFromFilename(file.path);
         var html = options.html || file.contents.toString();
+
         return transporter.sendMail({
             from: options.from,
             to: to,
@@ -35,13 +38,18 @@ module.exports = function (options) {
             generateTextFromHTML: true, // added
             html: html
         }, function (error, info) {
+
             if (error) {
                 console.error(error);
+                transporter.close();
                 return next();
             }
-            gutil.log('Send email', gutil.colors.cyan(subject), 'to',
-                gutil.colors.red(to));
+
+            gutil.log("Send email", gutil.colors.cyan(subject), 'to',
+            gutil.colors.red(to));
+            transporter.close();
             next();
+
         });
     });
 };
