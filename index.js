@@ -15,6 +15,7 @@ module.exports = function (options) {
         from: null,
         subject: null,
         html: null,
+        text: null,
         smtp: null
     });
 
@@ -30,13 +31,15 @@ module.exports = function (options) {
         var to = options.to.join(',');
         var subject = options.subject || _subjectFromFilename(file.path);
         var html = options.html || file.contents.toString();
+        var text = options.text || null;
 
         return transporter.sendMail({
             from: options.from,
             to: to,
             subject: subject,
             generateTextFromHTML: true, // added
-            html: html
+            html: html,
+            text: text
         }, function (error, info) {
 
             if (error) {
