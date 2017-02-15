@@ -64,7 +64,7 @@ var smtpInfo = {
 };
 
 gulp.task('mail', function () {
-  return gulp.src('./mails/i-love-you.html');
+  return gulp.src('./mails/i-love-you.html')
     .pipe(mail({
       subject: 'Surprise!?',
       to: [
