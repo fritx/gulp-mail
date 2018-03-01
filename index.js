@@ -1,16 +1,14 @@
-// learnt from https://github.com/meerkats/gulp-mailer
-// used old nodemailer@0.7.1 instead
+'use strict';
 
-var _ = require('underscore');
+var flatOpts = require('flat-options');
 var nodemailer = require('nodemailer');
 var path = require('path');
 var through2 = require('through2');
-var util = require('util');
-var gutil = require('gulp-util');
+var log = require('fancy-log');
+var colors = require('ansi-colors');
 
 module.exports = function (options) {
-
-    options = _.defaults(options || {}, {
+    options = flatOpts(options, {
         to: null,
         from: null,
         subject: null,
@@ -19,17 +17,16 @@ module.exports = function (options) {
         smtp: null
     });
 
-    return through2.obj(function (file, enc, next) {
-
-        var transporter = nodemailer.createTransport("SMTP", options.smtp);
+    return through2.obj(function (file, enc, callback) {
+        var transporter = nodemailer.createTransport('SMTP', options.smtp);
 
         if (file.isNull()) {
             this.push(file);
-            return next();
+            return callback();
         }
 
-        var to = options.to.join(',');
-        var subject = options.subject || _subjectFromFilename(file.path);
+        var to = options.to.constructor === Array ? options.to.join(',') : options.to;
+        var subject = options.subject || path.basename(file.path);
         var html = options.html || file.contents.toString();
         var text = options.text || null;
 
@@ -37,27 +34,18 @@ module.exports = function (options) {
             from: options.from,
             to: to,
             subject: subject,
-            generateTextFromHTML: true, // added
+            generateTextFromHTML: true,
             html: html,
             text: text
         }, function (error, info) {
-
             if (error) {
-                console.error(error);
-                transporter.close();
-                return next();
+                log.error(error);
+            } else {
+                log.info('Sent email', colors.cyan(subject), 'to', colors.red(to));
             }
 
-            gutil.log("Send email", gutil.colors.cyan(subject), 'to',
-            gutil.colors.red(to));
             transporter.close();
-            next();
-
+            callback();
         });
     });
-};
-
-_subjectFromFilename = function (filename) {
-    var name = path.basename(filename).replace(path.extname(filename), '');
-    return util.format('[TEST] %s', name);
 };
