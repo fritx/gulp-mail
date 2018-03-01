@@ -22,27 +22,27 @@ npm install --save-dev gulp-mail
 `gulp-mail` uses Nodemailer v0.7.1, which has been deprecated for some time. It is, however, simple and stable. Available options for `gulp-mail` are:
 
 ##### options.smtp
-Type: `Object`  
+Type: `Object`
 Contains required SMTP configuration values. (See the example below.)
 
 ##### options.to
-Type: `String|Array`  
+Type: `String|Array`
 A string or array containing one or more than one recipient address, respectively.
 
 ##### options.from
-Type: `String`  
+Type: `String`
 The display name for the sender.
 
 ##### options.subject
-Type: `String`  
+Type: `String`
 The email subject line. If not provided, a default subject line is generated from the source filename as `[TEST] path.basename`.
 
 ##### options.html
-Type: `String`  
+Type: `String`
 The HTML body of the email. If not provided, the source file becomes the message body.
 
 ##### options.text
-Type: `String`  
+Type: `String`
 The plaintext body of the email. If not provided, Nodemailer generates this based on the source file.
 
 ### Example
@@ -53,25 +53,25 @@ Currently, `gulp-mail` takes in piped streams and sends emails via SMTP only.
 var gulp = require('gulp');
 var mail = require('gulp-mail');
 
-var smtpInfo = {
-  auth: {
-    user: 'foo@163.com',
-    pass: '123456'
-  },
-  host: 'smtp.163.com',
-  secureConnection: true,
-  port: 465
+var smtpConfig = {
+    host: 'smtp.example.com',
+    port: 465,
+    secureConnection: true,
+    auth: {
+      user: 'user@example.com',
+      pass: 'correcthorsebatterystaple'
+    }
 };
 
 gulp.task('mail', function () {
-  return gulp.src('./mails/i-love-you.html')
+  return gulp.src('path/to/message.html')
     .pipe(mail({
-      subject: 'Surprise!?',
       to: [
-        'bar@gmail.com'
+        'bar@example.com'
       ],
-      from: 'Foo <foo@163.com>',
-      smtp: smtpInfo
+      from: 'Example <user@example.com>',
+      subject: 'A message from gulp-mail',
+      smtp: smtpConfig
     }));
 });
 ```
