@@ -1,16 +1,17 @@
 {
   "name": "gulp-mail",
-  "description": "Send mails with gulp",
+  "description": "Send emails with gulp",
   "version": "0.2.0",
   "homepage": "https://github.com/fritx/gulp-mail",
   "repository": "git@github.com:fritx/gulp-mail.git",
   "main": "./index.js",
   "scripts": {
-    "test": "gulp test"  
+    "test": "gulp test"
   },
   "keywords": [
     "gulpplugin",
-    "mail",
+    "nodemailer",
+    "email",
     "send"
   ],
   "dependencies": {
