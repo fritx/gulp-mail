@@ -1,7 +1,7 @@
 {
   "name": "gulp-mail",
   "description": "Send emails with gulp",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "homepage": "https://github.com/fritx/gulp-mail",
   "repository": "git@github.com:fritx/gulp-mail.git",
   "main": "./index.js",
