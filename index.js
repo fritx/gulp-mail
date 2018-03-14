@@ -6,7 +6,8 @@ var nodemailer = require('nodemailer');
 var path = require('path');
 var through2 = require('through2');
 var util = require('util');
-var gutil = require('gulp-util');
+var log = require('fancy-log');
+var colors = require('ansi-colors');
 
 module.exports = function (options) {
 
@@ -43,13 +44,12 @@ module.exports = function (options) {
         }, function (error, info) {
 
             if (error) {
-                console.error(error);
+                log.error(error);
                 transporter.close();
                 return next();
             }
-
-            gutil.log("Send email", gutil.colors.cyan(subject), 'to',
-            gutil.colors.red(to));
+            
+            log.info('Sent email', colors.cyan(subject), 'to', colors.red(to));
             transporter.close();
             next();
 
