@@ -1,5 +1,7 @@
 ## gulp-mail
 
+<a href="https://www.npmjs.com/package/gulp-mail"><img width="134" height="20" src="https://img.shields.io/npm/dm/gulp-mail.svg"></a>&nbsp;&nbsp;<a href="https://github.com/fritx/gulp-mail"><img width="78" height="20" src="http://img.shields.io/badge/license-MIT-blue.svg"></a>
+
 A [gulp](https://github.com/gulpjs/gulp) wrapper for [Nodemailer](https://nodemailer.com) used to quickly send emails from tasks and/or the command-line during development or testing.
 
 `gulp-mail` is based on [gulp-mailer](https://github.com/meerkats/gulp-mailer), which is not available on [npm](https://www.npmjs.com/).
