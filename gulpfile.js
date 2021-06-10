@@ -1,18 +1,13 @@
-var mail = require('./')
-var mailInfo = require('./test/mail-info')  // private
-var gulp = require('gulp')
+var mail = require('./');
+var smtpConfig = require('./test/smtp-config');
+var gulp = require('gulp');
 
-gulp.task('test', function(){
-  // send mail
-  return gulp
-  .src(['./test/message.html'])
-  .pipe(
+gulp.task('test', function () {
+  return gulp.src('./test/message.html').pipe(
     mail({
-      to: mailInfo.to,
-      from: mailInfo.from,
-      smtp: mailInfo.smtp,
+      to: smtpConfig.to,
+      from: smtpConfig.from,
+      smtp: smtpConfig.smtp,
     })
-  )
-  // blocked after sending
-  // becase transporter remained working
-})
+  );
+});
