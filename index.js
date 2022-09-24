@@ -20,6 +20,10 @@ module.exports = function (options) {
         smtp: null
     });
 
+    // fix security: (engine=sendmail) Command injection in nodemailer
+    // https://github.com/advisories/GHSA-48ww-j4fc-435p
+    assertValidOptions(options);
+
     return through2.obj(function (file, enc, next) {
 
         var transporter = nodemailer.createTransport("SMTP", options.smtp);
@@ -61,3 +65,22 @@ _subjectFromFilename = function (filename) {
     var name = path.basename(filename).replace(path.extname(filename), '');
     return util.format('[TEST] %s', name);
 };
+
+// for compatibility reasons, we don't upgrade nodemailer, but handle it
+// with the same error message as nodemailer, also old ECMAScript version
+// https://github.com/nodemailer/nodemailer/commit/ba31c64c910d884579875c52d57ac45acc47aa54
+function assertValidOptions(options) {
+    var toList = options.to || [];
+    var fromList = (options.from || '').split(/\s*\,+\s*/);
+    var addressList = [].concat(toList).concat(fromList);
+    var hasInvalidAddress = false
+    for (var i = 0; i < addressList.length; i++) {
+        if (/^-/.test(addressList[i])) {
+          hasInvalidAddress = true;
+          break;
+        }
+    }
+    if (hasInvalidAddress) {
+        throw new Error('Can not send mail. Invalid envelope addresses.');
+    }
+}
